@@ -4,11 +4,15 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
+const fetch = require("node-fetch");
 const app = express();
 
 app.use(express.json());
 
 const User = require("./model/user");
+const UserFavorites = require("./model/favorite");
+const UserNotes = require("./model/notes");
+const UserRatings = require("./model/ratings");
 
 app.post("/register", async (req, res) => {
     try {
@@ -33,6 +37,16 @@ app.post("/register", async (req, res) => {
             email: email.toLowerCase(),
             password: encryptedPassword,
         });
+
+        UserFavorites.create({
+            user_id: user._id,
+        })
+        UserNotes.create({
+            user_id: user._id,
+        })
+        UserRatings.create({
+            user_id: user._id,
+        })
 
         const token = jwt.sign(
             { user_id: user._id, email },
@@ -79,8 +93,22 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.get("/welcome", auth, (req, res) => {
-    res.status(200).send("Welcome");
+app.get("/favorites", auth, (req, res) => {
+    res.status(200).send("");
+})
+
+app.get("/ratings", auth, (req, res) => {
+    res.status(200).send("");
+})
+
+app.get("/notes", auth, (req, res) => {
+    res.status(200).send("");
+})
+
+app.get("/allmovies", async (req, res) => {
+    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`)
+        .then(fetchRes => fetchRes.json())
+        .then(fetchRes => res.status(200).send(fetchRes))
 })
 
 module.exports = app;
