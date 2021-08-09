@@ -3,7 +3,7 @@ require("./config/db").connect();
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const auth = require("./middleware/auth");
 const app = express();
 
 app.use(express.json());
@@ -78,5 +78,9 @@ app.post("/login", async (req, res) => {
         console.log(err);
     }
 });
+
+app.get("/welcome", auth, (req, res) => {
+    res.status(200).send("Welcome");
+})
 
 module.exports = app;
