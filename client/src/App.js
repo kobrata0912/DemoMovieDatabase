@@ -1,13 +1,10 @@
-import Navbar from './components/navbar.js'
-import Container from '@material-ui/core/Container';
-// eslint-disable-next-line
-import {sizing} from '@material-ui/system'
+import { Container,} from "react-bootstrap"
+import NavigationBar from './components/navbar'
 
 function App() {
   return (
-    <Container width="100%">
-     <Navbar/>
-     
+    <Container fluid>
+        <NavigationBar/>
     </Container>
   );
 }

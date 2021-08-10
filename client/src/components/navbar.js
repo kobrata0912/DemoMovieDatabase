@@ -1,22 +1,26 @@
-import Container from '@material-ui/core/Container'
-import Grid from "@material-ui/core/Grid"
+import { Navbar, Container, Nav, Form, FormControl, Button } from 'react-bootstrap'
 
-function Navbar() {
+function NavigationBar() {
     return (
-        <Container width="100%" height="10%">
-            <Grid container
-                direction="row"
-                justifyContent="space-between"
-                alignItems="baseline">
-                <Grid item xs={6}>
-                    My Movies Collection
-                </Grid>
-                <Grid item xs={6}>
-                    Search
-                </Grid>
-            </Grid>
-        </Container>
+        <Navbar bg="light" variant="light">
+            <Container fluid>
+                <Navbar.Brand href="#home">My Movies Collection</Navbar.Brand>
+                <Nav className="me-auto">
+                </Nav>
+            </Container>
+            <Container fluid>
+            <Form className="d-flex">
+                <FormControl
+                    type="search"
+                    placeholder="Search"
+                    className="mr-2"
+                    aria-label="Search"
+                />
+                <Button variant="outline-success">Search</Button>
+            </Form>
+            </Container>
+        </Navbar>
     );
 }
 
-export default Navbar;
+export default NavigationBar;
