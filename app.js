@@ -105,8 +105,14 @@ app.get("/notes", auth, (req, res) => {
     res.status(200).send("");
 })
 
-app.get("/allmovies", async (req, res) => {
+app.get("/allmovies", (req, res) => {
     fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`)
+        .then(fetchRes => fetchRes.json())
+        .then(fetchRes => res.status(200).send(fetchRes))
+})
+
+app.get("/movie_details", auth, (req, res) => {
+    fetch(`https://api.themoviedb.org/3/movie/${req.query.movie_id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`)
         .then(fetchRes => fetchRes.json())
         .then(fetchRes => res.status(200).send(fetchRes))
 })
