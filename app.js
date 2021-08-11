@@ -5,9 +5,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
 const fetch = require("node-fetch");
+const cors = require('cors')
 const app = express();
 
 app.use(express.json());
+app.use(cors())
 
 const User = require("./model/user");
 const UserFavorites = require("./model/favorite");
