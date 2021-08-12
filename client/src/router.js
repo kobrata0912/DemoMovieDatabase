@@ -4,6 +4,7 @@ import UserContext from './utils/userContext';
 
 import Home from './pages/home'
 import Login from './pages/login';
+import Register from './pages/register';
 
 
 const MyRouter = () => {
@@ -13,7 +14,12 @@ const MyRouter = () => {
 	return (
 		<Switch>
 			<Route exact path='/home' component={Home} />
-			<Route exact path='/login' component={Login} />
+			<Route exact path='/login'>
+			{loggedIn ? <Redirect to='/home' /> : <Login />}
+			</Route>
+			<Route exact path='/register'>
+			{loggedIn ? <Redirect to='/home' /> : <Register />}
+			</Route>
 			<Route exact path='/' component={Home} />
 			{/* <Route component={Error} /> */}
 		</Switch>

@@ -1,7 +1,9 @@
 import { useState, useContext, useEffect } from "react";
-import UserContext from './utils/userContext';
-import LoadingContext from './utils/loadingContext'
 import { useHistory } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
+import UserContext from './utils/userContext';
+import LoadingContext from './utils/loadingContext';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App(props) {
 
@@ -28,6 +30,9 @@ function App(props) {
     setUser({
       loggedIn: false,
     });
+    localStorage.setItem('email', '');
+    localStorage.setItem('password', '');
+    toast.success('Logged out successfully');
     history.push('/home');
   };
 
@@ -57,11 +62,48 @@ function App(props) {
 
   const [loading, toggleLoading] = useState(loadingState);
 
+  useEffect(() => {
+    console.log('i ran')
+    const email = localStorage.getItem('email');
+    const password = localStorage.getItem('password');
+    if (email && email !== '' && password && password !== '' && user.loggedIn === false) {
+
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': "application/json" },
+        body: JSON.stringify({ email, password })
+      }
+
+      fetch("http://localhost:4001/login", requestOptions)
+        .then(res => res.json())
+        .then(authUser => {
+          logIn(authUser);
+          //loadingContext.hideLoading();
+        })
+        .catch((e) => {
+          //loadingContext.hideLoading();
+          toast.error(e.message);
+        });
+    } else {
+      //hideLoading();
+    }
+  }, [user.loggedIn]);
 
   return (
     <UserContext.Provider value={{ user, logIn, logOut }} >
       <LoadingContext.Provider value={loading}>
-          {props.children}
+        <ToastContainer
+          position='bottom-right'
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        {props.children}
       </LoadingContext.Provider>
     </UserContext.Provider>
   );

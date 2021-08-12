@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import UserContext from '../../utils/userContext';
 import LoadingContext from '../../utils/loadingContext';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
@@ -66,16 +66,14 @@ const Login = (props) => {
                 userContext.logIn(authUser);
                 localStorage.setItem('email', email);
                 localStorage.setItem('password', password);
-                //toast.success(`Logged in successfully as ${email}`);
-                console.log(authUser)
-                console.log(userContext.user)
+                toast.success(`Logged in successfully as ${email}`);
                 history.push('/home');
             })
             .catch((e) => {
                 setEmail('');
                 setPassword('');
                 //loadingContext.hideLoading();
-                //toast.error(e.message);
+                toast.error(e.message);
             });
     };
 
