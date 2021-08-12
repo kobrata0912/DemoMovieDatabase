@@ -22,13 +22,13 @@ app.post("/register", async (req, res) => {
         const { first_name, last_name, email, password } = req.body;
 
         if (!(email && password && first_name && last_name)) {
-            res.status(400).send("All input is required");
+            res.status(400).json({error: 'All fields are required!'})
         }
 
         const oldUser = await User.findOne({ email });
 
         if (oldUser) {
-            return res.status(409).send("User Already Exist. Please Login");
+            return res.status(409).json({error: 'User already exists!'})
         }
 
         encryptedPassword = await bcrypt.hash(password, 10);
@@ -73,6 +73,7 @@ app.post("/login", async (req, res) => {
         if (!(email && password)) {
             res.status(400).send("All input is required");
         }
+
         const user = await User.findOne({ email });
 
         if (user && (await bcrypt.compare(password, user.password))) {
@@ -88,14 +89,20 @@ app.post("/login", async (req, res) => {
 
             res.status(200).json(user);
         } else {
-            res.status(400).send("Invalid Credentials");
+            res.status(400).json({error: 'Invalid credentials'})
         }
     } catch (err) {
         console.log(err);
     }
 });
 
-app.get("/favorites", auth, (req, res) => {
+app.get("/favorites", auth, async (req, res) => {
+    try {
+        const favorites = await UserFavorites.findOne({user_id});
+        console.log(favorites)
+    } catch (e) {
+        console.log(e)
+    }
     res.status(200).send("");
 })
 
@@ -108,7 +115,7 @@ app.get("/notes", auth, (req, res) => {
 })
 
 app.get("/allmovies", (req, res) => {
-    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`)
+    fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&with_watch_monetization_types=flatrate`)
         .then(fetchRes => fetchRes.json())
         .then(fetchRes => res.status(200).send(fetchRes))
 })

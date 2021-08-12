@@ -13,26 +13,26 @@ function NavigationBar() {
             <Container fluid lg={2}>
                 <Navbar.Brand>My Movies Collection</Navbar.Brand>
                 <Nav className="me-auto">
-                <Nav.Link><Link style={{"text-decoration": "none", "color":"black"}} to="/home">Home</Link></Nav.Link>
+                <Link style={{"textDecoration": "none", "color":"black"}} className="p-2" to="/home">Home</Link>
                 {!userContext.user || !userContext.user.loggedIn ? (
-					<Nav.Link><Link style={{"text-decoration": "none", "color":"black"}} to="/login">Log In</Link></Nav.Link>
+					<Link style={{"textDecoration": "none", "color":"black"}} className="p-2" to="/login">Log In</Link>
 				) : (
 					''
 				)}
                 {!userContext.user || !userContext.user.loggedIn ? (
-					<Nav.Link><Link style={{"text-decoration": "none", "color":"black"}} to="/register">Register</Link></Nav.Link>
+					<Link style={{"textDecoration": "none", "color":"black"}} className="p-2" to="/register">Register</Link>
 				) : (
 					''
 				)}
-                <Nav.Link><Link style={{"text-decoration": "none", "color":"black"}} to="/search">Search</Link></Nav.Link>
+               <Link style={{"textDecoration": "none", "color":"black"}} className="p-2" to="/search">Search</Link>
                 {userContext.user && userContext.user.loggedIn ? (
-					<Nav.Link style={{"text-decoration": "none", "color":"black"}} onClick={logOut}>Log out</Nav.Link>
+					<Nav.Link style={{"textDecoration": "none", "color":"black"}} className="p-2" onClick={logOut}>Log out</Nav.Link>
 				) : (
 					''
 				)}
                 </Nav>
             </Container>
-            <Form className="d-flex">
+            <Form style={{width:"400px"}}className="d-flex">
                 <FormControl
                     type="search"
                     placeholder="Search by movie title ..."

@@ -62,18 +62,26 @@ const Login = (props) => {
         fetch("http://localhost:4001/login", requestOptions)
             .then(res => res.json())
             .then(authUser => {
-                //loadingContext.hideLoading();
-                userContext.logIn(authUser);
-                localStorage.setItem('email', email);
-                localStorage.setItem('password', password);
-                toast.success(`Logged in successfully as ${email}`);
-                history.push('/home');
+                if (authUser.status !== 200) {
+                    throw new Error(authUser.error)
+                } else {
+                    //loadingContext.hideLoading();
+                    userContext.logIn(authUser);
+                    localStorage.setItem('email', email);
+                    localStorage.setItem('password', password);
+                    toast.success(`Logged in successfully as ${email}`);
+                    history.push('/home');
+                }
             })
             .catch((e) => {
+                toast.error("" + e);
                 setEmail('');
                 setPassword('');
+                setEmailValid('');
+                setPasswordValid('');
+                setEmailClass('form-control');
+                setPasswordClass('form-control')
                 //loadingContext.hideLoading();
-                toast.error(e.message);
             });
     };
 
@@ -127,7 +135,6 @@ const Login = (props) => {
 
                         {passwordValid === false ? (
                             <Alert variant="danger"
-                                v-if='$v.password.$dirty && $v.password.$invalid'
                             >
                                 Моля, въведете валидна парола!
                             </Alert>

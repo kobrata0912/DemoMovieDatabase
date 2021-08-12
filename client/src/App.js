@@ -63,7 +63,6 @@ function App(props) {
   const [loading, toggleLoading] = useState(loadingState);
 
   useEffect(() => {
-    console.log('i ran')
     const email = localStorage.getItem('email');
     const password = localStorage.getItem('password');
     if (email && email !== '' && password && password !== '' && user.loggedIn === false) {
@@ -82,7 +81,7 @@ function App(props) {
         })
         .catch((e) => {
           //loadingContext.hideLoading();
-          toast.error(e.message);
+          toast.error(e);
         });
     } else {
       //hideLoading();

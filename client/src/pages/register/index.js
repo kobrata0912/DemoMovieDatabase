@@ -104,25 +104,7 @@ const Register = (props) => {
 
     const handleRegister = (event) => {
         event.preventDefault();
-        //loadingContext.showLoading();
-        // firebase
-        // 	.doCreateUserWithEmailAndPassword(email, password, firstName, lastName)
-        // 	.then((authUser) => {
-        // 		logIn(authUser);
-        // 		loadingContext.hideLoading();
-        // 		toast.success('Successfully registered!')
-        // 		history.push('/home');
-        // 	})
-        // 	.catch((e) => {
-        // 		setFirstName('');
-        // 		setLastName('');
-        // 		setEmail('');
-        // 		setPassword('');
-        // 		setRePassword('');
-        // 		loadingContext.hideLoading();
-        // 		toast.error(e);
-        // 	});
-
+        
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': "application/json" },
