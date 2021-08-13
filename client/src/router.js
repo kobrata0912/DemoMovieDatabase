@@ -5,6 +5,7 @@ import UserContext from './utils/userContext';
 import Home from './pages/home'
 import Login from './pages/login';
 import Register from './pages/register';
+import Search from './pages/search'
 
 
 const MyRouter = () => {
@@ -20,6 +21,7 @@ const MyRouter = () => {
 			<Route exact path='/register'>
 			{loggedIn ? <Redirect to='/home' /> : <Register />}
 			</Route>
+			<Route exact path='/search/:movie_title' component={Search} />
 			<Route exact path='/' component={Home} />
 			{/* <Route component={Error} /> */}
 		</Switch>

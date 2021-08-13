@@ -96,6 +96,19 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.get("/search", async(req, res) => {
+    try {
+        fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${req.query.movie_title}&page=1&include_adult=true`)
+        .then(fetchRes => fetchRes.json())
+        .then(fetchRes => {
+            res.status(200).send(fetchRes)
+        })
+    } catch (e) {
+        console.log(e)
+        res.status(e.status).send(e)
+    }
+})
+
 app.get("/favorites", auth, async (req, res) => {
     try {
         const favorites = await UserFavorites.findOne({user_id});

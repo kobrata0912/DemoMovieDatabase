@@ -24,7 +24,7 @@ function NavigationBar() {
 				) : (
 					''
 				)}
-               <Link style={{"textDecoration": "none", "color":"black"}} className="p-2" to="/search">Search</Link>
+               <Link style={{"textDecoration": "none", "color":"black"}} className="p-2" to="/search/ ">Search</Link>
                 {userContext.user && userContext.user.loggedIn ? (
 					<Nav.Link style={{"textDecoration": "none", "color":"black"}} className="p-2" onClick={logOut}>Log out</Nav.Link>
 				) : (
@@ -33,7 +33,7 @@ function NavigationBar() {
                 </Nav>
             </Container>
             <Form style={{width:"400px"}}className="d-flex">
-                <FormControl
+                <Form.Control
                     type="search"
                     placeholder="Search by movie title ..."
                     className="mr-2"
