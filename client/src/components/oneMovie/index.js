@@ -1,4 +1,4 @@
-import { Card, Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 
 
 function OneMovie(props) {
@@ -19,7 +19,7 @@ function OneMovie(props) {
             </Card.Body>
             </Card> */}
             <Col sm={{span: 2, offset: 1}}>
-                <img src={picture} style={{ width: '12rem' }} />
+                <img src={picture} style={{ width: '12rem' }} alt="NO MOVIE POSTER" />
             </Col>
             <Col sm={7}>
                 <Row className="m-1">

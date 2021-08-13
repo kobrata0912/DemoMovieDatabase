@@ -2,12 +2,12 @@ import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserContext from '../../utils/userContext';
-import LoadingContext from '../../utils/loadingContext';
+//import LoadingContext from '../../utils/loadingContext';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 
 const Login = (props) => {
     const userContext = useContext(UserContext);
-    const loadingContext = useContext(LoadingContext)
+    //const loadingContext = useContext(LoadingContext)
     const history = useHistory();
 
     const [email, setEmail] = useState('');
@@ -62,7 +62,7 @@ const Login = (props) => {
         fetch("http://localhost:4001/login", requestOptions)
             .then(res => res.json())
             .then(authUser => {
-                if (authUser.status !== 200) {
+                if (authUser.status) {
                     throw new Error(authUser.error)
                 } else {
                     //loadingContext.hideLoading();
@@ -74,7 +74,7 @@ const Login = (props) => {
                 }
             })
             .catch((e) => {
-                toast.error("" + e);
+                toast.error("Error - " + e);
                 setEmail('');
                 setPassword('');
                 setEmailValid('');

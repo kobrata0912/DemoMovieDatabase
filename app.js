@@ -75,6 +75,7 @@ app.post("/login", async (req, res) => {
         }
 
         const user = await User.findOne({ email });
+        
 
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = jwt.sign(
@@ -85,9 +86,13 @@ app.post("/login", async (req, res) => {
                 }
             );
 
-            user.token = token;
+            const user_id = user._id;
 
-            res.status(200).json(user);
+            user.token = token;
+            const favorites = await UserFavorites.findOne({user_id})
+            const notes = await UserNotes.findOne({user_id})
+            const ratings = await UserRatings.findOne({user_id})
+            res.status(200).json({user, favorites, notes, ratings});
         } else {
             res.status(400).json({error: 'Invalid credentials'})
         }

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import UserContext from './utils/userContext';
@@ -34,6 +34,25 @@ function App(props) {
     localStorage.setItem('password', '');
     toast.success('Logged out successfully');
     history.push('/home');
+  };
+
+  const setFavorites = (userObject, favorites) => {
+    setUser({
+      ...userObject,
+      favorites,
+    });
+  };
+  const setNotes = (userObject, notes) => {
+    setUser({
+      ...userObject,
+      notes,
+    });
+  };
+  const setRatings = (userObject, ratings) => {
+    setUser({
+      ...userObject,
+      ratings,
+    });
   };
 
   const showLoading = () => {
@@ -89,7 +108,7 @@ function App(props) {
   }, [user.loggedIn]);
 
   return (
-    <UserContext.Provider value={{ user, logIn, logOut }} >
+    <UserContext.Provider value={{ user, logIn, logOut, setFavorites, setNotes, setRatings }} >
       <LoadingContext.Provider value={loading}>
         <ToastContainer
           position='bottom-right'

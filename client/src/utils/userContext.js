@@ -6,7 +6,10 @@ const UserContext = React.createContext({
   logOut: () => {},
   userFavorites: null,
   userNotes: null,
-  userRatings: null
+  userRatings: null,
+  setFavorites: () => {},
+  setRatings: () => {},
+  setNotes: () => {},
 })
 
 export default UserContext

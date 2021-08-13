@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import OneMovie from '../../components/oneMovie';
