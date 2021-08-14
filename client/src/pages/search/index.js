@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import OneMovie from '../../components/oneMovie';
@@ -40,6 +40,12 @@ const Search = (props) => {
 
     };
 
+    useEffect(() => {
+        if (searchTitle !== "") {
+            handleSearch({ target: { value: searchTitle }, preventDefault: () => {} })
+        }
+    }, [])
+
     return (
         <Container fluid className="pt-5">
             <Row className="justify-content-md-center pb-3">
@@ -54,7 +60,7 @@ const Search = (props) => {
                             onChange={e => setSearchTitle(e.target.value)}
                             aria-label="Search"
                         />
-                        <Button variant="outline-success" type="submit" disabled={searchTitle === ""}>Search</Button>
+                        <Button variant="outline-success" type="submit" disabled={searchTitle === ""} style={{marginLeft: "10px"}}>Search</Button>
                     </Form>
                 </Col>
             </Row>

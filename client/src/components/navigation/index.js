@@ -1,12 +1,22 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Navbar, Container, Nav, Form, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import UserContext from '../../utils/userContext';
 
 function NavigationBar() {
 
+    const history = useHistory();
+
+    const [searchTitle, setSearchTitle] = useState('')
+
     const userContext = useContext(UserContext)
     const {logOut} = userContext;
+
+    const handleSearch = (event) => {
+        event.preventDefault();
+        setSearchTitle('');
+        history.push(`/search/${searchTitle}`)
+    }
 
     return (
         <Navbar bg="light" variant="pills">
@@ -32,14 +42,16 @@ function NavigationBar() {
 				)}
                 </Nav>
             </Container>
-            <Form style={{width:"400px"}}className="d-flex">
+            <Form style={{width:"400px"}} className="d-flex" onSubmit={handleSearch}>
                 <Form.Control
                     type="search"
                     placeholder="Search by movie title ..."
                     className="mr-2"
+                    value={searchTitle}
+                    onChange={(e) => setSearchTitle(e.target.value)}
                     aria-label="Search"
                 />
-                <Button variant="outline-success">Search</Button>
+                <Button variant="outline-success" style={{marginLeft: "10px"}} disabled={searchTitle === ''} type="submit">Search</Button>
             </Form>
         </Navbar>
     );

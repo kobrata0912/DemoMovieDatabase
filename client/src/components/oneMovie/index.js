@@ -1,27 +1,32 @@
-import { Button, Col, Row } from "react-bootstrap";
-
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { useContext, useState } from 'react'
+import UserContext from '../../utils/userContext'
 
 function OneMovie(props) {
 
-    const picture = 'https://image.tmdb.org/t/p/original/' + props.poster_path
+    const userContext = useContext(UserContext)
+    const [movieId] = useState(props.id)
 
+    const isFavorite = userContext.user.favorites.movies_ids.indexOf(props.id) !== -1 ? true : false;
+
+    const picture = props.poster_path !== null ? 'https://image.tmdb.org/t/p/original/' + props.poster_path : '/no-poster.jpg'
+
+    const handleAdd = (event) => {
+        event.preventDefault()
+        userContext.addFavorites(userContext.user, movieId)
+    }
+
+    const handleRemove = (event) => {
+        event.preventDefault()
+        userContext.removeFavorites(userContext.user, movieId)
+    }
     return (
 
         <Row className="m-2">
-            {/* <Card style={{ width: '18rem' }} className="p-1 m-2">
-            <img src={picture} />
-            <Card.Body>
-                <Card.Title>{props.title}</Card.Title>
-                <Card.Text>
-                    {props.overview}
-                </Card.Text>
-                <Button variant="primary">Add to favorites</Button>
-            </Card.Body>
-            </Card> */}
-            <Col sm={{span: 2, offset: 1}}>
+            <Col xl={{ span: 2, offset: 1 }}>
                 <img src={picture} style={{ width: '12rem' }} alt="NO MOVIE POSTER" />
             </Col>
-            <Col sm={7}>
+            <Col xl={7}>
                 <Row className="m-1">
                     <h4>{props.title} ({props.release_date.split("-")[0]})</h4>
                 </Row>
@@ -32,7 +37,15 @@ function OneMovie(props) {
                     {props.overview}
                 </Row>
                 <Row className="m-3">
-                    <Button style={{width:"140px"}} variant="primary">Add to favorites</Button>
+                        {isFavorite ? (
+                            <Form onSubmit={handleRemove}>
+                            <Button style={{ width: "200px" }} variant="primary" type="submit">Remove from favorites</Button>
+                            </Form>
+                        ) : (
+                            <Form onSubmit={handleAdd}>
+                            <Button style={{ width: "140px" }} variant="primary" type="submit">Add to favorites</Button>
+                            </Form>
+                        )}
                 </Row>
             </Col>
         </Row>

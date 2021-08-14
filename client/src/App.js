@@ -36,19 +36,88 @@ function App(props) {
     history.push('/home');
   };
 
-  const setFavorites = (userObject, favorites) => {
-    setUser({
-      ...userObject,
-      favorites,
-    });
+  const addFavorites = (userObject, favorite) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': "application/json", 'x-access-token': user.user.token },
+      body: JSON.stringify({ type: "add", movie_id: favorite })
+    }
+    try {
+      fetch("http://localhost:4001/favorites", requestOptions)
+        .then(res => {
+          if (res.status === 200) {
+            toast.success("Added to favorites")
+            const newFavorites = [...user.favorites.movies_ids, favorite]
+            setUser({
+              ...userObject,
+              favorites: {
+                ...userObject.favorites,
+                movies_ids: newFavorites
+              }
+            })
+          }
+        })
+        .catch((e) => {
+          //loadingContext.hideLoading();
+          toast.error(e);
+        });
+
+    } catch (e) {
+      toast.error(e.message)
+    }
+
   };
-  const setNotes = (userObject, notes) => {
+  const addNotes = (userObject, notes) => {
     setUser({
       ...userObject,
       notes,
     });
   };
-  const setRatings = (userObject, ratings) => {
+  const addRatings = (userObject, ratings) => {
+    setUser({
+      ...userObject,
+      ratings,
+    });
+  };
+
+  const removeFavorites = (userObject, favorite) => {
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': "application/json", 'x-access-token': user.user.token },
+      body: JSON.stringify({ type: "delete", movie_id: favorite })
+    }
+    try {
+      fetch("http://localhost:4001/favorites", requestOptions)
+        .then(res => {
+          if (res.status === 200) {
+            toast.success("Removed from favorites")
+            const newFavorites = user.favorites.movies_ids.filter((id) => id !== favorite)
+            setUser({
+              ...userObject,
+              favorites: {
+                ...userObject.favorites,
+                movies_ids: newFavorites
+              }
+            })
+          }
+        })
+        .catch((e) => {
+          //loadingContext.hideLoading();
+          toast.error(e);
+        });
+
+    } catch (e) {
+      toast.error(e.message)
+    }
+  };
+  const removeNotes = (userObject, notes) => {
+    setUser({
+      ...userObject,
+      notes,
+    });
+  };
+  const removeRatings = (userObject, ratings) => {
     setUser({
       ...userObject,
       ratings,
@@ -108,7 +177,7 @@ function App(props) {
   }, [user.loggedIn]);
 
   return (
-    <UserContext.Provider value={{ user, logIn, logOut, setFavorites, setNotes, setRatings }} >
+    <UserContext.Provider value={{ user, logIn, logOut, addFavorites, addNotes, addRatings, removeFavorites, removeNotes, removeRatings }} >
       <LoadingContext.Provider value={loading}>
         <ToastContainer
           position='bottom-right'

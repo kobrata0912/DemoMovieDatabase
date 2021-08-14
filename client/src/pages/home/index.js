@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import Hero from '../../components/hero/'
-import Favorites from "../../components/favorites"
+import Favorites from "../favorites"
 import UserContext from "../../utils/userContext";
 
 function Home() {

@@ -2,14 +2,17 @@ import React from 'react'
 
 const UserContext = React.createContext({
   user: null,
-  logIn: () => {},
-  logOut: () => {},
   userFavorites: null,
   userNotes: null,
   userRatings: null,
-  setFavorites: () => {},
-  setRatings: () => {},
-  setNotes: () => {},
+  logIn: () => {},
+  logOut: () => {},
+  addFavorites: () => {},
+  addRatings: () => {},
+  addNotes: () => {},
+  removeFavorites: () => {},
+  removeRatings: () => {},
+  removeNotes: () => {},
 })
 
 export default UserContext

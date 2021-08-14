@@ -22,13 +22,13 @@ app.post("/register", async (req, res) => {
         const { first_name, last_name, email, password } = req.body;
 
         if (!(email && password && first_name && last_name)) {
-            res.status(400).json({error: 'All fields are required!'})
+            res.status(400).json({ error: 'All fields are required!' })
         }
 
         const oldUser = await User.findOne({ email });
 
         if (oldUser) {
-            return res.status(409).json({error: 'User already exists!'})
+            return res.status(409).json({ error: 'User already exists!' })
         }
 
         encryptedPassword = await bcrypt.hash(password, 10);
@@ -75,7 +75,7 @@ app.post("/login", async (req, res) => {
         }
 
         const user = await User.findOne({ email });
-        
+
 
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = jwt.sign(
@@ -89,25 +89,25 @@ app.post("/login", async (req, res) => {
             const user_id = user._id;
 
             user.token = token;
-            const favorites = await UserFavorites.findOne({user_id})
-            const notes = await UserNotes.findOne({user_id})
-            const ratings = await UserRatings.findOne({user_id})
-            res.status(200).json({user, favorites, notes, ratings});
+            const favorites = await UserFavorites.findOne({ user_id })
+            const notes = await UserNotes.findOne({ user_id })
+            const ratings = await UserRatings.findOne({ user_id })
+            res.status(200).json({ user, favorites, notes, ratings });
         } else {
-            res.status(400).json({error: 'Invalid credentials'})
+            res.status(400).json({ error: 'Invalid credentials' })
         }
     } catch (err) {
         console.log(err);
     }
 });
 
-app.get("/search", async(req, res) => {
+app.get("/search", async (req, res) => {
     try {
         fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${req.query.movie_title}&page=1&include_adult=true`)
-        .then(fetchRes => fetchRes.json())
-        .then(fetchRes => {
-            res.status(200).send(fetchRes)
-        })
+            .then(fetchRes => fetchRes.json())
+            .then(fetchRes => {
+                res.status(200).send(fetchRes)
+            })
     } catch (e) {
         console.log(e)
         res.status(e.status).send(e)
@@ -116,12 +116,34 @@ app.get("/search", async(req, res) => {
 
 app.get("/favorites", auth, async (req, res) => {
     try {
-        const favorites = await UserFavorites.findOne({user_id});
-        console.log(favorites)
+        const favorites = await UserFavorites.findOne({ user_id: req.user.user_id });
+        res.status(200).json(favorites.movies_ids)
     } catch (e) {
         console.log(e)
     }
-    res.status(200).send("");
+})
+
+app.post("/favorites", auth, async (req, res) => {
+    if (req.body.type === "add") {
+        try {
+            let favorites = await UserFavorites.findOne({ user_id: req.user.user_id })
+            favorites.movies_ids.push(req.body.movie_id);
+            await UserFavorites.findOneAndUpdate({ user_id: req.user.user_id }, favorites)
+            res.status(200).send("Favorites updated");
+        } catch (e) {
+            console.log(e)
+        }
+    } else if (req.body.type === "delete") {
+        try {
+            const favorites = await UserFavorites.findOne({ user_id: req.user.user_id })
+            const newFavorites = favorites.movies_ids.filter((id) => id !== req.body.movie_id)
+            await UserFavorites.findOneAndUpdate({ user_id: req.user.user_id }, { $set: { movies_ids: newFavorites } })
+            res.status(200).send("Favorites updated");
+        } catch (e) {
+            console.log(e)
+            res.status(e.status).send(e)
+        }
+    }
 })
 
 app.get("/ratings", auth, (req, res) => {
@@ -139,9 +161,16 @@ app.get("/allmovies", (req, res) => {
 })
 
 app.get("/movie_details", auth, (req, res) => {
-    fetch(`https://api.themoviedb.org/3/movie/${req.query.movie_id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`)
+    try {
+        fetch(`https://api.themoviedb.org/3/movie/${req.query.movie_id}?api_key=${process.env.TMDB_API_KEY}&language=en-US`)
         .then(fetchRes => fetchRes.json())
-        .then(fetchRes => res.status(200).send(fetchRes))
+        .then(fetchRes => {
+            res.status(200).send(fetchRes)
+        })
+    } catch (e) {
+        console.log(e)
+    }
+
 })
 
 module.exports = app;
