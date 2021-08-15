@@ -1,36 +1,30 @@
-import React, { useContext, useState } from "react"
-import { Card, Button } from "react-bootstrap"
+import React, { useContext } from "react"
+import { Card, Button, Form } from "react-bootstrap"
 import UserContext from "../../utils/userContext"
+import {Link} from 'react-router-dom'
 
 function OneFavorite(props) {
 
     const userContext = useContext(UserContext)
-    const [movieId] = useState(props.id)
-
-    const isFavorite = userContext.user.favorites.movies_ids.indexOf(props.id) !== -1 ? true : false;
 
     const picture = props.poster_path !== null ? 'https://image.tmdb.org/t/p/original/' + props.poster_path : '/no-poster.jpg'
 
-    const handleAdd = (event) => {
-        event.preventDefault()
-        userContext.addFavorites(userContext.user, movieId)
-    }
-
     const handleRemove = (event) => {
         event.preventDefault()
-        userContext.removeFavorites(userContext.user, movieId)
+        userContext.removeFavorites(userContext.user, props)
     }
 
     return (
-        <Card style={{ width: '18rem' }}>
+        <Card style={{ width: '18rem' }} className="m-1 p-1">
             <Card.Img variant="top" src={picture} />
             <Card.Body>
-                <Card.Title>Card Title</Card.Title>
+            <Link to={{pathname: `/movie_details/${props.id}`}}><Card.Title>{props.title} ({props.release_date})</Card.Title></Link>
                 <Card.Text>
-                    Some quick example text to build on the card title and make up the bulk of
-                    the card's content.
+                    {props.overview.substring(0, 150).concat("...")}
                 </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
+                <Form onSubmit={handleRemove}>
+                            <Button style={{ width: "200px" }} variant="primary" type="submit">Remove from favorites</Button>
+                            </Form>
             </Card.Body>
         </Card>
     )
