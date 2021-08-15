@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row } from 'react-bootstrap'
 import { toast } from "react-toastify";
 import OneMovie from "../../components/oneMovie";
 import OneNote from "../../components/oneNotes";
 import OneRating from "../../components/oneRating"
-import UserContext from "../../utils/userContext";
 
 function MovieDetails(props) {
 
-    const userContext = useContext(UserContext)
     const [movie, setMovie] = useState({})
-    const [notes, setNotes] = useState({})
 
     useEffect(() => {
         try {
